@@ -1,0 +1,121 @@
+#include "test_runner.h"
+
+#include <algorithm>
+#include <iostream>
+#include <string>
+#include <queue>
+#include <stdexcept>
+#include <set>
+using namespace std;
+
+
+
+template <class T>
+class ObjectPool {
+public:
+
+    T *Allocate() {
+
+        if (free.size() > 0) {
+            int k= free.size();
+           // for (int i = 0; i < k; i++) {
+                T *ob=new T;
+                ob=free.front();
+                noti.push_back(ob);
+                free.pop_front();
+            //}
+            return noti.back();
+        }
+
+        if (free.size() == 0) {
+            T *ob = new T;
+            noti.push_back(ob);
+            return noti.back();
+        }
+
+    }
+
+    T *TryAllocate(){
+        if (free.size() > 0) {
+            int k= free.size();
+           // for (int i = 0; i < k; i++) {
+                T *ob=new T;
+                ob=free.front();
+                noti.push_back(ob);
+                free.pop_front();
+        //}
+            return noti.back();
+        }
+        return nullptr;
+}
+
+    void Deallocate(T* object){
+        int z=0;
+        if (noti.size()>0) {
+            int k = noti.size();
+            for (int i = 0; i < k; i++) {
+                if (noti[i] == object) {
+                    z = 1;
+                    noti.erase(noti.begin() + i);
+                    break;
+                }
+            }
+        }
+        if (z==1){
+            free.push_back(object);
+        }
+        if (z==0){
+            throw invalid_argument("Foo");
+        }
+
+    }
+
+    ~ObjectPool(){
+     //   for (int i = 0 ; i<free.size();i++){
+       //         delete free[i];
+        //}
+            free.clear();
+        //for (int i = 0 ; i<noti.size();i++){
+          //  delete noti[i];
+        //}
+        noti.clear();
+    }
+
+private:
+    // Добавьте сюда поля
+
+    deque <T*> free;
+    deque <T*> noti;
+    deque <T> elem;
+};
+
+
+
+void TestObjectPool() {
+    ObjectPool<string> pool;
+
+    auto p1 = pool.Allocate();
+    auto p2 = pool.Allocate();
+    auto p3 = pool.Allocate();
+
+    *p1 = "first";
+    *p2 = "second";
+    *p3 = "third";
+
+    pool.Deallocate(p2);
+    ASSERT_EQUAL(*pool.Allocate(), "second");
+
+    pool.Deallocate(p3);
+    pool.Deallocate(p1);
+    ASSERT_EQUAL(*pool.Allocate(), "third");
+    ASSERT_EQUAL(*pool.Allocate(), "first");
+
+    pool.Deallocate(p1);
+}
+
+int main() {
+    TestRunner tr;
+    RUN_TEST(tr, TestObjectPool);
+    return 0;
+}
+© 2020 GitHub, Inc
