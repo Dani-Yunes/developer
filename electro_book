@@ -1,0 +1,96 @@
+#include <iomanip>
+#include <iostream>
+#include <vector>
+#include <utility>
+#include <map>
+#include <set>
+
+
+
+using namespace std;
+
+
+class ReadingManager {
+public:
+    const int max_pages=1000;
+    const int max_readers=100000;
+    ReadingManager() : rating(max_pages + 1, 0),// нулями
+                       readers(max_readers + 1, -1),  //изначально заполню позиции -1
+                       rat(max_pages + 1, 0) {}  //нулями ДУМАЮ ЧТО КОЛ-во ЧЕЛОВЕК НА странице
+
+    void Read(int user_id, int page_count) {
+        Obnova(user_id, page_count);
+        rat[page_count]++;
+        readers[user_id]=page_count;
+
+    }
+
+    double Cheer(const int& user_id) const {
+        int ratio_user = readers[user_id];
+
+        if (ratio_user == -1) {
+            return 0;
+        }
+
+        if (Kolvo.size() == 1 && ratio_user != -1) { return 1; }
+
+
+        int from_the_back = rat[ratio_user];
+        int k=0;
+        for (int i=0;i<ratio_user;i++ ){
+            k=k+rat[i];
+        }
+
+        return k*1.0  / (Kolvo.size()-1.0);
+    }
+
+
+
+private:
+    vector<int>rating;
+    vector<int>readers;
+    vector<int>rat;
+    vector<int > Kolvo;
+
+
+    void Obnova(int user_id,int page){
+        if(readers[user_id]!=-1) {
+            rat[readers[user_id]]--;
+        }
+        else { Kolvo.push_back(user_id);     }
+    }
+
+};
+
+
+
+
+int main() {
+    // Для ускорения чтения данных отключается синхронизация
+    // cin и cout с stdio,
+    // а также выполняется отвязка cin от cout
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    ReadingManager manager;
+
+    int query_count;
+    cin >> query_count;
+
+    for (int query_id = 0; query_id < query_count; ++query_id) {
+        string query_type;
+        cin >> query_type;
+        int user_id;
+        cin >> user_id;
+
+        if (query_type == "READ") {
+            int page_count;
+            cin >> page_count;
+            manager.Read(user_id, page_count);
+        } else if (query_type == "CHEER") {
+            cout << setprecision(6) << manager.Cheer(user_id) << "\n";
+        }
+    }
+
+    return 0;
+}
