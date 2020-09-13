@@ -1,0 +1,106 @@
+#include<ctime>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+template<typename T>
+
+class Deque {
+
+private:
+    vector <T> b;
+    vector <T> f;
+
+public:
+
+    Deque() {
+
+    }
+
+    bool Empty() const {
+        return (b.size() == 0 && f.size() == 0);
+
+    }
+
+
+    size_t Size() const {
+        return b.size() + f.size();
+    }
+
+    const T &operator[](size_t idx) const {
+        if (idx >= f.size()) return b[idx - f.size()];
+        if (idx < f.size())  return f[f.size()- idx-1 ];
+    }
+
+    T &operator[](size_t idx) {
+        if (idx >= f.size()) return b[idx - f.size()];
+        if (idx < f.size())return f[f.size()-idx-1];
+    }
+
+
+    const T &At(size_t index) const {
+        if (index >= f.size() + b.size()) {
+            throw out_of_range("");
+        }
+        if (index >= f.size()) return b[index - f.size()];
+        if (index < f.size())  return f[f.size()- index -1];
+    }
+
+    T &At(size_t index) {
+        if (index >= f.size() + b.size()) {
+            throw out_of_range("");
+        }
+        if (index >= f.size()) return b[index - f.size()];
+        if (index < f.size())  return f[f.size()- index -1];
+    }
+
+    const T &Front() const {
+        if (!Empty() && f.size() != 0) return f[f.size()-1];
+        if (!Empty() && f.size() == 0)return b[0];
+    }
+
+    T &Front() {
+        if (!Empty() && f.size() != 0) return f[f.size()-1];
+        if (!Empty() && f.size() == 0)return b[0];
+    }
+
+    const T &Back() const {
+        if (!Empty() && b.size() != 0)return b[b.size() - 1];
+        if (!Empty() && b.size() == 0)return f[0];
+    }
+
+    T &Back() {
+        if (!Empty() && b.size() != 0)return b[b.size() - 1];
+        if (!Empty() && b.size() == 0)return f[0];
+    }
+
+
+    void PushBack(const T &value) {
+        b.push_back(value);
+    }
+
+    const void PushBack(const T &value) const {
+        b.push_back(value);
+    }
+
+
+    void PushFront(const T &value) {
+        f.push_back(value);
+    }
+
+    const void PushFront(const T &value )const {
+        f.push_back(value);
+
+    }
+};
+
+int main(){
+    Deque< int > dq;
+    dq.PushFront(73);
+    dq.PushFront(0);
+    dq.PushBack(999);
+    cout<<" dlina "<< dq.Size()<<" first "<<dq.Front()<<"   last  "<< dq.Back()<<" element 3   "<<dq[2];
+
+    return 0;
+}
