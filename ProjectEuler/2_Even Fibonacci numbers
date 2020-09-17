@@ -1,0 +1,16 @@
+def SumFib(i) :                       # {f[i-1], f[i]} --> {f[i], f[i+1]}
+    i[0], i[1] =i[1], i[0] + i[1]
+    return i
+
+a= [1, 1]
+sum = 0
+
+while True:
+    a = SumFib(a)
+    if a[1] >= 4000000:
+        break
+    elif a[1]%2 == 0:
+        sum += a[1]
+
+print(sum)
+
