@@ -1,0 +1,20 @@
+def Is_simple(x):        #Проверка числа на простоту
+    i = 2
+    while i < x:
+        if x%i == 0:
+            return False
+        i += 1
+    return True
+
+def simple_number(x):      #Нахождение x-того простого числа
+    a = 1
+    i=2
+    indx = 0               #Счетчик номера простого числа 
+    while indx < x:
+        if Is_simple(i):
+            a = i         #Обновление а при новом простом числе
+            indx += 1
+        i += 1
+    return a
+
+print(simple_number(10001))
