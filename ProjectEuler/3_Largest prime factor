@@ -1,0 +1,16 @@
+number = 600851475143
+
+def factorize_number(x):
+    """Раскладывает числа на множители,
+    записывает в список, и выводит максимальное"""
+    a = []
+    divisor = 2;
+    while x > 1:
+        if x%divisor == 0:
+            a.append(divisor)
+            x //=divisor
+        else:
+            divisor += 1
+    print(max(a))
+
+factorize_number(number)
