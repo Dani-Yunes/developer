@@ -18,13 +18,13 @@ number= """73167176531330624919225119674426574742355349194934
 84580156166097919133875499200524063689912560717606
 05886116467109405077541002256983155200055935729725
 71636269561882670428252483600823257530420752963450"""
-number=number.replace("\n", "")
-maxnum = 0
+number=number.replace("\n", "")      #убираю знаки переноса строки
+maxnum = 0                           #тут храню макс.число
 
 for i in range(987):
     calc = 1
-    for num in number[i:i+13]:
+    for num in number[i:i+13]:       #постепенно передвигаюсь по 13-ти цифрам
         calc *= int(num)
-    maxnum = max(maxnum, calc)
+    maxnum = max(maxnum, calc)       #в maxnum записываю наибольшее
 
 print(maxnum)
